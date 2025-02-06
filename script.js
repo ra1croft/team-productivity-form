@@ -1,59 +1,41 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('taskForm');
-    const taskSelection = document.getElementById('taskSelection');
-    const taskCounts = document.getElementById('taskCounts');
-    const taskCountInputs = document.getElementById('taskCountInputs');
-    const emailInput = document.getElementById('email');
-    const employeeIdInput = document.getElementById('employeeId');
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission for demo purposes
 
-    // Simulate employee ID generation based on email
-    emailInput.addEventListener('input', function() {
-        const email = emailInput.value;
-        if (email.includes('@')) {
-            employeeIdInput.value = email.split('@')[0]; // Basic logic to use part of email as Employee ID
-        } else {
-            employeeIdInput.value = ''; // Clear if invalid email
-        }
+    // Get selected tasks and task counts
+    const selectedTasks = Array.from(document.querySelectorAll('input[name="tasks"]:checked')).map(checkbox => checkbox.value);
+    const taskCounts = selectedTasks.map(task => document.getElementById(`count-${task}`).value);
+
+    // Get the email and employee ID
+    const email = document.getElementById('email').value;
+    const employeeId = document.getElementById('employeeId').value;
+
+    // Log the data before sending it
+    console.log({
+        email: email,
+        employeeId: employeeId,
+        tasks: selectedTasks,
+        taskCounts: taskCounts
     });
 
-    // Show count input fields when tasks are selected
-    taskSelection.addEventListener('change', function() {
-        const selectedTasks = Array.from(document.querySelectorAll('input[name="tasks"]:checked')).map(checkbox => checkbox.value);
-        
-        if (selectedTasks.length > 0) {
-            taskCounts.style.display = 'block';
-            taskCountInputs.innerHTML = ''; // Clear previous inputs
-            selectedTasks.forEach(task => {
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <label for="count-${task}">How many ${task} cases did you work on?</label>
-                    <input type="number" id="count-${task}" name="count-${task}" min="1" required>
-                `;
-                taskCountInputs.appendChild(div);
-            });
-        } else {
-            taskCounts.style.display = 'none'; // Hide task count inputs if no tasks are selected
-        }
-    });
+    // Prepare the data to send to the Google Apps Script
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('employeeId', employeeId);
+    formData.append('tasks', selectedTasks);
+    formData.append('taskCounts', taskCounts);
 
-    // Form validation and submission
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form submission for demo purposes
-
-        const selectedTasks = Array.from(document.querySelectorAll('input[name="tasks"]:checked')).map(checkbox => checkbox.value);
-        let isValid = true;
-
-        selectedTasks.forEach(task => {
-            const countInput = document.getElementById(`count-${task}`);
-            if (!countInput.value || isNaN(countInput.value) || countInput.value < 1) {
-                isValid = false;
-                alert(`Please enter a valid number for ${task}`);
-            }
-        });
-
-        if (isValid) {
-            alert('Form Submitted Successfully!');
-            // You can handle form submission here, e.g., send data to a server
-        }
+    // Send the form data to the Google Apps Script
+    fetch('<YOUR_GOOGLE_APPS_SCRIPT_URL>', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        alert('Form submitted successfully');
+    })
+    .catch(error => {
+        alert('Error submitting the form');
+        console.error(error);
     });
 });
+
