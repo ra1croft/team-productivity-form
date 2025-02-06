@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Productivity Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Team Productivity Tracker</h1>
+        <form id="taskForm">
+            <!-- Employee ID and Email Section -->
+            <section>
+                <label for="email">Email ID:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="employeeId">Employee ID:</label>
+                <input type="text" id="employeeId" name="employeeId" disabled>
+            </section>
+
+            <!-- Section 1: Task Selection -->
+            <section id="taskSelection">
+                <h2>Select Tasks</h2>
+                <label><input type="checkbox" name="tasks" value="Risk Outcall"> Risk Outcall</label><br>
+                <label><input type="checkbox" name="tasks" value="VKYC Cases"> VKYC Cases</label><br>
+                <label><input type="checkbox" name="tasks" value="Re-KYC Cases"> Re-KYC Cases</label><br>
+                <label><input type="checkbox" name="tasks" value="LEA Cases"> LEA Cases</label><br>
+                <label><input type="checkbox" name="tasks" value="TM & ONB Outcall Support"> TM & ONB Outcall Support</label><br>
+                <label><input type="checkbox" name="tasks" value="Scrubbing - Actioned the ticket and did Outcall"> Scrubbing - Actioned the ticket and did Outcall</label><br>
+                <label><input type="checkbox" name="tasks" value="General Scrubbing - Ticket not actioned"> General Scrubbing - Ticket not actioned</label><br>
+            </section>
+
+            <!-- Section 2: Task Count Input (Initially Hidden) -->
+            <section id="taskCounts" style="display:none;">
+                <h2>Enter Task Counts</h2>
+                <div id="taskCountInputs"></div>
+            </section>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
